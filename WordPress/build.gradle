@@ -32,6 +32,11 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
 
+    packagingOptions {
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
+
     defaultConfig {
         applicationId "org.wordpress.android"
         versionName "alpha-17"
@@ -41,6 +46,8 @@ android {
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     productFlavors {
@@ -128,6 +135,18 @@ dependencies {
     debugCompile project(path:':libs:analytics:WordPressAnalytics', configuration: 'debug')
     releaseCompile project(path:':libs:editor:WordPressEditor', configuration: 'release')
     debugCompile project(path:':libs:editor:WordPressEditor', configuration: 'debug')
+
+    // Espresso (UI testing)
+    androidTestCompile ('com.android.support.test.espresso:espresso-web:2.2.2') {
+        exclude module: 'tagsoup'
+        exclude module: 'support-annotations'
+    }
+
+    // The lifecycle testing library
+    androidTestCompile ('it.polimi.testing:activity-rule-lifecycle-testing:0.13') {
+        exclude group: 'com.android.support'
+        exclude group: 'com.android.support.test'
+    }
 }
 
 configurations.all {
