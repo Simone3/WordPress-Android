@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import org.wordpress.android.R;
 import org.wordpress.android.WordPress;
 import org.wordpress.android.analytics.AnalyticsTracker.Stat;
+import org.wordpress.android.event_testing.events.PostUploadStart;
 import org.wordpress.android.models.Blog;
 import org.wordpress.android.models.Post;
 import org.wordpress.android.models.PostLocation;
@@ -67,6 +68,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.greenrobot.event.EventBus;
+import it.polimi.testing.temporalassertions.core.EventMonitor;
 
 public class PostUploadService extends Service {
     private static Context mContext;
@@ -208,6 +210,9 @@ public class PostUploadService extends Service {
 
         @Override
         protected Boolean doInBackground(Post... posts) {
+
+            EventMonitor.getInstance().fireCustomEvent(new PostUploadStart());
+
             mPost = posts[0];
 
             String postTitle = TextUtils.isEmpty(mPost.getTitle()) ? getString(R.string.untitled) : mPost.getTitle();

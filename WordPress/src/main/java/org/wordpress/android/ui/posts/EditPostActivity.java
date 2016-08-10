@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -119,6 +120,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.greenrobot.event.EventBus;
+import it.polimi.testing.temporalassertions.core.EventMonitor;
+import it.polimi.testing.temporalassertions.events.MenuClickEvent;
+
 
 public class EditPostActivity extends AppCompatActivity implements EditorFragmentListener,
         ActivityCompat.OnRequestPermissionsResultCallback, EditorWebViewCompatibility.ReflectionFailureListener {
@@ -179,7 +183,8 @@ public class EditPostActivity extends AppCompatActivity implements EditorFragmen
     private Post mPost;
     private Post mOriginalPost;
 
-    private EditorFragmentAbstract mEditorFragment;
+    @VisibleForTesting
+    EditorFragmentAbstract mEditorFragment;
     private EditPostSettingsFragment mEditPostSettingsFragment;
     private EditPostPreviewFragment mEditPostPreviewFragment;
 
@@ -523,6 +528,9 @@ public class EditPostActivity extends AppCompatActivity implements EditorFragmen
     // Menu actions
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
+
+        EventMonitor.getInstance().fireCustomEvent(new MenuClickEvent(item.getItemId()));
+
         int itemId = item.getItemId();
 
         if (itemId == android.R.id.home) {

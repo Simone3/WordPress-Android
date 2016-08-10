@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import it.polimi.testing.temporalassertions.core.EventMonitor;
+import it.polimi.testing.temporalassertions.events.ToastEvent;
+
 /**
  * Provides a simplified way to show toast messages without having to create the toast, set the
  * desired gravity, etc.
@@ -32,6 +35,9 @@ public class ToastUtils {
                 (duration == Duration.SHORT ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG));
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+
+        EventMonitor.getInstance().fireCustomEvent(new ToastEvent(text));
+
         return toast;
     }
 }

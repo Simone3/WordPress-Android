@@ -34,6 +34,8 @@ import com.android.volley.toolbox.ImageLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wordpress.android.editor.EditorWebViewAbstract.ErrorListener;
+import org.wordpress.android.event_testing.EventUtils;
+import org.wordpress.android.event_testing.events.HtmlToggleEvent;
 import org.wordpress.android.util.AppLog;
 import org.wordpress.android.util.AppLog.T;
 import org.wordpress.android.util.JSONUtils;
@@ -55,6 +57,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import it.polimi.testing.temporalassertions.core.EventMonitor;
+import it.polimi.testing.temporalassertions.events.FragmentLifecycleEvent;
+import static it.polimi.testing.temporalassertions.events.FragmentLifecycleEvent.ON_DETACH;
 
 public class EditorFragment extends EditorFragmentAbstract implements View.OnClickListener, View.OnTouchListener,
         OnJsEditorStateChangedListener, OnImeBackListener, EditorWebViewAbstract.AuthHeaderRequestListener,
@@ -249,6 +255,8 @@ public class EditorFragment extends EditorFragmentAbstract implements View.OnCli
 
     @Override
     public void onDetach() {
+        EventMonitor.getInstance().fireCustomEvent(new FragmentLifecycleEvent(EditorFragment.class, ON_DETACH));
+
         // Soft cancel (delete flag off) all media uploads currently in progress
         for (String mediaId : mUploadingMedia.keySet()) {
             mEditorFragmentListener.onMediaUploadCancelClicked(mediaId, false);
@@ -522,6 +530,8 @@ public class EditorFragment extends EditorFragmentAbstract implements View.OnCli
             // Reset selection to avoid buggy cursor behavior
             mWebView.execJavaScriptFromString("ZSSEditor.resetSelectionOnField('zss_field_content');");
         }
+
+        EventMonitor.getInstance().fireCustomEvent(new HtmlToggleEvent(toggleButton.isChecked()));
     }
 
     private void displayLinkDialog() {

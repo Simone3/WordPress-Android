@@ -10,6 +10,7 @@ import android.os.IBinder;
 import org.wordpress.android.R;
 import org.wordpress.android.WordPress;
 import org.wordpress.android.WordPressDB;
+import org.wordpress.android.event_testing.events.MediaUploadCancelEvent;
 import org.wordpress.android.models.MediaUploadState;
 import org.wordpress.android.ui.media.services.MediaEvents.MediaChanged;
 import org.wordpress.android.util.AppLog.T;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import it.polimi.testing.temporalassertions.core.EventMonitor;
 
 /**
  * A service for uploading media files from the media browser.
@@ -94,6 +96,9 @@ public class MediaUploadService extends Service {
             // The media item is currently uploading - abort the upload process
             mCurrentUploadMediaTask.cancel(true);
             mUploadInProgress = false;
+
+            EventMonitor.getInstance().fireCustomEvent(new MediaUploadCancelEvent());
+
         } else {
             // Remove the media item from the upload queue
             if (WordPress.getCurrentBlog() != null) {
