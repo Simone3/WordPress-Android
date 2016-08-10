@@ -27,6 +27,6 @@ public class MediaUploadProgressEvent extends BusEvent {
 
     @Override
     public String toString() {
-        return "{Media upload progress "+(progress*100)+"%}";
+        return "{Media upload progress " + (progress * 100) + "%}";
     }
 }

@@ -5,8 +5,7 @@ import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.anything;
 
-public class MediaUploadCancelEvent extends MediaUploadOutcomeEvent
-{
+public class MediaUploadCancelEvent extends MediaUploadOutcomeEvent {
     public static Matcher<MediaUploadCancelEvent> isMediaUploadCancel() {
         return new FeatureMatcher<MediaUploadCancelEvent, Void>(anything(""), "is media upload cancel", "") {
             @Override

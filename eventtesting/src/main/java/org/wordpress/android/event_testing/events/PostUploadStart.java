@@ -7,8 +7,7 @@ import it.polimi.testing.temporalassertions.events.Event;
 
 import static org.hamcrest.Matchers.anything;
 
-public class PostUploadStart extends Event
-{
+public class PostUploadStart extends Event {
     public static Matcher<PostUploadStart> isPostUploadStart() {
         return new FeatureMatcher<PostUploadStart, Void>(anything(""), "is post upload start", "") {
             @Override

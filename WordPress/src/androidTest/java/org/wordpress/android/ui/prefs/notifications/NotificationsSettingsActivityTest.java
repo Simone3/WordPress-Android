@@ -29,26 +29,21 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
 @MediumTest
-public class NotificationsSettingsActivityTest extends ActivityRuleLifecycleTest<NotificationsSettingsActivity>
-{
+public class NotificationsSettingsActivityTest extends ActivityRuleLifecycleTest<NotificationsSettingsActivity> {
     @Override
-    protected ActivityTestRule<NotificationsSettingsActivity> initializeActivityTestRule()
-    {
+    protected ActivityTestRule<NotificationsSettingsActivity> initializeActivityTestRule() {
         return new ActivityTestRule<>(NotificationsSettingsActivity.class);
     }
 
     @Nullable
     @Override
-    protected RotationCallback testRotation()
-    {
-        return new RotationCallback()
-        {
+    protected RotationCallback testRotation() {
+        return new RotationCallback() {
             // TODO obviously this is not the best way, probably better to mock the fetched posts
             private final static String BLOG_NAME = "testpolimi";
 
             @Override
-            public void beforeRotation()
-            {
+            public void beforeRotation() {
                 // Click on the blog
                 onData(allOf(is(instanceOf(PreferenceScreen.class)), withTitleText(BLOG_NAME)))
                         .perform(click());
@@ -59,8 +54,7 @@ public class NotificationsSettingsActivityTest extends ActivityRuleLifecycleTest
             }
 
             @Override
-            public void afterRotation()
-            {
+            public void afterRotation() {
                 // Check that we are in the notifications settings
                 onView(withText(R.string.notifications_tab))
                         .check(matches(isDisplayed()));
@@ -70,29 +64,25 @@ public class NotificationsSettingsActivityTest extends ActivityRuleLifecycleTest
 
     @Nullable
     @Override
-    protected PauseCallback testPause()
-    {
+    protected PauseCallback testPause() {
         return null;
     }
 
     @Nullable
     @Override
-    protected StopCallback testStop()
-    {
+    protected StopCallback testStop() {
         return null;
     }
 
     @Nullable
     @Override
-    protected DestroyCallback testDestroy()
-    {
+    protected DestroyCallback testDestroy() {
         return null;
     }
 
     @Nullable
     @Override
-    protected RecreateCallback testRecreation()
-    {
+    protected RecreateCallback testRecreation() {
         return null;
     }
 }

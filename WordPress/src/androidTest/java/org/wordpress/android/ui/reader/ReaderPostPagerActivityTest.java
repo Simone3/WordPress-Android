@@ -29,16 +29,12 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 @RunWith(AndroidJUnit4.class)
 @MediumTest
-public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<ReaderPostPagerActivity>
-{
+public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<ReaderPostPagerActivity> {
     @Override
-    protected ActivityTestRule<ReaderPostPagerActivity> initializeActivityTestRule()
-    {
-        return new ActivityTestRule<ReaderPostPagerActivity>(ReaderPostPagerActivity.class, false, false)
-        {
+    protected ActivityTestRule<ReaderPostPagerActivity> initializeActivityTestRule() {
+        return new ActivityTestRule<ReaderPostPagerActivity>(ReaderPostPagerActivity.class, false, false) {
             @Override
-            protected void afterActivityLaunched()
-            {
+            protected void afterActivityLaunched() {
                 onWebView(allOf(isAssignableFrom(WebView.class), withId(R.id.reader_webview)))
                         .forceJavascriptEnabled();
             }
@@ -47,10 +43,8 @@ public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<Reade
 
     @Nullable
     @Override
-    protected PauseCallback testPause()
-    {
-        return new PauseCallback()
-        {
+    protected PauseCallback testPause() {
+        return new PauseCallback() {
             // TODO obviously this is not the best way, probably better to mock the WebView with custom content
             private final static long BLOG_ID = 114212435L;
             private final static long POST_ID = 23L;
@@ -59,8 +53,7 @@ public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<Reade
             private final static String POST_CONTENT_END = "What right have you to be merry";
 
             @Override
-            public void beforePause()
-            {
+            public void beforePause() {
                 // Start activity with correct extras
                 Intent intent = new Intent();
                 intent.putExtra("is_single_post", true);
@@ -76,14 +69,12 @@ public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<Reade
             }
 
             @Override
-            public void whilePaused()
-            {
+            public void whilePaused() {
                 // Do nothing here
             }
 
             @Override
-            public void afterResume()
-            {
+            public void afterResume() {
                 // Check that the whole post is shown
                 onWebView(allOf(isAssignableFrom(WebView.class), withId(R.id.reader_webview)))
                         .withElement(findElement(Locator.CSS_SELECTOR, SELECTOR))
@@ -95,30 +86,26 @@ public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<Reade
 
     @Nullable
     @Override
-    protected RotationCallback testRotation()
-    {
+    protected RotationCallback testRotation() {
         return null;
     }
 
     @Nullable
     @Override
-    protected RecreateCallback testRecreation()
-    {
+    protected RecreateCallback testRecreation() {
         return null;
     }
 
 
     @Nullable
     @Override
-    protected StopCallback testStop()
-    {
+    protected StopCallback testStop() {
         return null;
     }
 
     @Nullable
     @Override
-    protected DestroyCallback testDestroy()
-    {
+    protected DestroyCallback testDestroy() {
         return null;
     }
 }

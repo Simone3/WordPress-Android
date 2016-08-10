@@ -70,25 +70,21 @@ import static org.wordpress.android.event_testing.events.PostUploadStart.isPostU
 
 @RunWith(AndroidJUnit4.class)
 @MediumTest
-public class EditPostActivityTest
-{
+public class EditPostActivityTest {
     private SourceViewEditText editorTitleView;
     private SourceViewEditText editorContentView;
 
     @Rule
     public IntentsTestRule<EditPostActivity> activityTestRule =
-            new IntentsTestRule<EditPostActivity>(EditPostActivity.class, false, false)
-            {
+            new IntentsTestRule<EditPostActivity>(EditPostActivity.class, false, false) {
                 @Override
-                public void beforeActivityLaunched()
-                {
+                public void beforeActivityLaunched() {
                     // Initialize the monitor before each test
                     EventMonitor.getInstance().initialize();
                 }
 
                 @Override
-                public void afterActivityLaunched()
-                {
+                public void afterActivityLaunched() {
                     // Add observables used by all tests
                     EventMonitor.getInstance().observe(EventBusObservable.mediaUploadEvents());
                     getEditorViews();
@@ -98,79 +94,75 @@ public class EditPostActivityTest
                     EventMonitor.getInstance().checkThat(
                             "Switched to HTML even if a media item is uploading!",
                             anEventThat(isHtmlToggle())
-                            .cannotHappenBetween(
-                                anEventThat(isMediaUploadProgress()),
-                                anEventThat(isMediaUploadOutcome())));
+                                    .cannotHappenBetween(
+                                            anEventThat(isMediaUploadProgress()),
+                                            anEventThat(isMediaUploadOutcome())));
 
                     EventMonitor.getInstance().checkThat(
                             "Post content changed after the upload started!",
                             providedThat(
-                                existsAnEventThat(isPostUploadStart()))
-                            .then(
-                                anEventThat(isPostChange())
-                                .canHappenOnlyBefore(
-                                    anEventThat(isPostUploadStart()))));
+                                    existsAnEventThat(isPostUploadStart()))
+                                    .then(
+                                            anEventThat(isPostChange())
+                                                    .canHappenOnlyBefore(
+                                                            anEventThat(isPostUploadStart()))));
 
                     EventMonitor.getInstance().checkThat(
                             "Clicking on 'publish' didn't perform the expected actions!",
                             atLeast(1).eventsWhereEach(
-                                anyEvent(
-                                    isPostUploadStart(),
-                                    isToastDisplay()))
-                            .mustHappenAfter(
-                                anEventThat(isMenuClick(R.id.menu_save_post))));
+                                    anyEvent(
+                                            isPostUploadStart(),
+                                            isToastDisplay()))
+                                    .mustHappenAfter(
+                                            anEventThat(isMenuClick(R.id.menu_save_post))));
 
                     EventMonitor.getInstance().checkThat(
                             "Media upload wasn't cancelled when editor was removed!",
                             providedThat(
-                                exist(
-                                    between(
-                                        anEventThat(isMediaUploadProgress()),
-                                        anEventThat(isMediaUploadOutcome())),
-                                    exactly(1))
-                                .eventsWhereEach(isFragmentLifecycleEvent(ON_DETACH)))
-                            .then(
-                                atLeast(1).eventsWhereEach(isMediaUploadCancel())
-                                .mustHappenAfter(
-                                    anEventThat(isFragmentLifecycleEvent(ON_DETACH)))));
+                                    exist(
+                                            between(
+                                                    anEventThat(isMediaUploadProgress()),
+                                                    anEventThat(isMediaUploadOutcome())),
+                                            exactly(1))
+                                            .eventsWhereEach(isFragmentLifecycleEvent(ON_DETACH)))
+                                    .then(
+                                            atLeast(1).eventsWhereEach(isMediaUploadCancel())
+                                                    .mustHappenAfter(
+                                                            anEventThat(isFragmentLifecycleEvent(ON_DETACH)))));
 
                     EventMonitor.getInstance().checkThat(
                             "Race condition between publish and upload media!",
                             isNotSatisfied(
-                                exist(
-                                    between(
-                                        anEventThat(isMediaUploadProgress()),
-                                        anEventThat(
-                                            anyEvent(
-                                                isMediaUploadOutcome(),
-                                                isMediaUploadProgress()))),
-                                    atLeast(1))
-                                .eventsWhereEach(isPostUploadStart())));
+                                    exist(
+                                            between(
+                                                    anEventThat(isMediaUploadProgress()),
+                                                    anEventThat(
+                                                            anyEvent(
+                                                                    isMediaUploadOutcome(),
+                                                                    isMediaUploadProgress()))),
+                                            atLeast(1))
+                                            .eventsWhereEach(isPostUploadStart())));
 
                     EventMonitor.getInstance().checkThat(
                             "Media upload progress updates are not sent correctly!",
                             allEventsWhereEach(isMediaUploadProgress())
-                            .areOrdered(new Comparator<MediaUploadProgressEvent>()
-                            {
-                                @Override
-                                public int compare(MediaUploadProgressEvent e1, MediaUploadProgressEvent e2)
-                                {
-                                    return Float.compare(e1.getProgress(), e2.getProgress());
-                                }
-                            }));
+                                    .areOrdered(new Comparator<MediaUploadProgressEvent>() {
+                                        @Override
+                                        public int compare(MediaUploadProgressEvent e1, MediaUploadProgressEvent e2) {
+                                            return Float.compare(e1.getProgress(), e2.getProgress());
+                                        }
+                                    }));
                 }
 
                 @Override
-                public void afterActivityFinished()
-                {
+                public void afterActivityFinished() {
                     // At the end of each test, stop the verification
                     EventMonitor.getInstance().stopVerification();
                 }
             };
 
     @Test
-    public void testUploadImage()
-    {
+    public void testUploadImage() {
         // Start activity and verification, and mock the image selection
         launchActivity();
         startVerification();
@@ -199,12 +191,11 @@ public class EditPostActivityTest
                      // "still uploading" but it's not true TODO shouldn't make it flaky but fix if possible just to be safe
 
         onView(withContentDescription(R.string.publish_post))
-            .perform(click());
+                .perform(click());
     }
 
     @Test
-    public void testPublishError()
-    {
+    public void testPublishError() {
         // Start activity
         launchActivity();
         Context context = InstrumentationRegistry.getTargetContext();
@@ -213,9 +204,9 @@ public class EditPostActivityTest
         EventMonitor.getInstance().checkThat(
                 "The error toast wasn't displayed!",
                 exactly(1).eventsWhereEach(
-                    isToastDisplay(equalTo(context.getString(R.string.error_publish_empty_post))))
-                .mustHappenAfter(
-                    anEventThat(isMenuClick(R.id.menu_save_post))));
+                        isToastDisplay(equalTo(context.getString(R.string.error_publish_empty_post))))
+                        .mustHappenAfter(
+                                anEventThat(isMenuClick(R.id.menu_save_post))));
 
         // Start verification
         startVerification();
@@ -232,25 +223,23 @@ public class EditPostActivityTest
     /*** OTHER TEST CASES ***/
 
 
+    /**************
+     * HELPER METHODS
+     **************/
 
-
-
-    /************** HELPER METHODS **************/
-
-    private void startVerification()
-    {
+    private void startVerification() {
         EventMonitor.getInstance().startVerification(
                 EventMonitor.getLoggerEventsSubscriber(),
                 EventMonitor.getLoggerResultsSubscriber());
     }
 
-    private void launchActivity()
-    {
+    private void launchActivity() {
         Blog blog = WordPress.getCurrentBlog();
-        if(blog == null) throw new IllegalStateException("Blog is null");
+        if (blog == null) throw new IllegalStateException("Blog is null");
 
         Post newPost = new Post(blog.getLocalTableBlogId(), false);
-        newPost.setCategories("[" + SiteSettingsInterface.getDefaultCategory(InstrumentationRegistry.getTargetContext()) +"]");
+        newPost.setCategories(
+                "[" + SiteSettingsInterface.getDefaultCategory(InstrumentationRegistry.getTargetContext()) + "]");
         newPost.setPostFormat(SiteSettingsInterface.getDefaultFormat(InstrumentationRegistry.getTargetContext()));
         WordPress.wpDB.savePost(newPost);
 
@@ -261,15 +250,12 @@ public class EditPostActivityTest
         activityTestRule.launchActivity(intent);
     }
 
-    private void setupCameraResult()
-    {
-        try
-        {
+    private void setupCameraResult() {
+        try {
             // Create file in device storage from the test image resource
             String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
             File file = new File(extStorageDirectory, "_wordpress_image_for_testing.PNG");
-            if(!file.exists())
-            {
+            if (!file.exists()) {
                 Bitmap bm = BitmapFactory.decodeResource(
                         InstrumentationRegistry.getTargetContext().getResources(),
                         R.drawable.wordpress_image_for_testing);
@@ -286,31 +272,24 @@ public class EditPostActivityTest
             resultData.setData(Uri.fromFile(file));
             Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
             intending(not(isInternal())).respondWith(result);
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             throw new IllegalStateException("Error during camera setup");
         }
     }
 
-    private void sleep(long milliseconds)
-    {
-        try
-        {
+    private void sleep(long milliseconds) {
+        try {
             Thread.sleep(milliseconds);
-        }
-        catch(InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             throw new IllegalStateException("Sleep interrupted!");
         }
     }
 
-    private void getEditorViews()
-    {
-        try
-        {
+    private void getEditorViews() {
+        try {
             EditorFragmentAbstract f = activityTestRule.getActivity().mEditorFragment;
-            if(!(f instanceof EditorFragment)) throw new IllegalStateException("Test works only with non-legacy fragment!");
+            if (!(f instanceof EditorFragment))
+                throw new IllegalStateException("Test works only with non-legacy fragment!");
             EditorFragment fragment = (EditorFragment) f;
 
             Field field = fragment.getClass().getDeclaredField("mSourceViewTitle");
@@ -320,9 +299,7 @@ public class EditPostActivityTest
             field = fragment.getClass().getDeclaredField("mSourceViewContent");
             field.setAccessible(true);
             editorContentView = (SourceViewEditText) field.get(fragment);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             throw new IllegalStateException("Reflection error!");
         }
     }

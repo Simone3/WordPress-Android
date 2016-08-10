@@ -16,20 +16,18 @@ public class EventUtils {
 
         // TODO also add other fields changes, as listed in Post#hasChanges() method
 
-        if(titleChanges!=null && contentChanges!=null) {
+        if (titleChanges != null && contentChanges != null) {
             return titleChanges.mergeWith(contentChanges);
-        }
-        else if(titleChanges!=null) {
+        } else if (titleChanges != null) {
             return titleChanges;
-        }
-        else {
+        } else {
             return contentChanges;
         }
     }
 
     private static Observable<PostChangeEvent> textChanges(final TextView textView) {
         Observable<PostChangeEvent> observable = null;
-        if(textView!=null) {
+        if (textView != null) {
             observable = RxTextView.textChanges(textView)
                     .map(new Func1<CharSequence, PostChangeEvent>() {
                         @Override

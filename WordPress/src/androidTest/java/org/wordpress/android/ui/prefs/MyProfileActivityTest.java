@@ -29,32 +29,27 @@ import static org.hamcrest.CoreMatchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 @MediumTest
-public class MyProfileActivityTest extends ActivityRuleLifecycleTest<MyProfileActivity>
-{
+public class MyProfileActivityTest extends ActivityRuleLifecycleTest<MyProfileActivity> {
     @Override
-    protected ActivityTestRule<MyProfileActivity> initializeActivityTestRule()
-    {
+    protected ActivityTestRule<MyProfileActivity> initializeActivityTestRule() {
         return new ActivityTestRule<>(MyProfileActivity.class);
     }
 
     @Nullable
     @Override
-    public RotationCallback testRotation()
-    {
-        return new RotationCallback()
-        {
+    public RotationCallback testRotation() {
+        return new RotationCallback() {
             private String name;
 
             @Override
-            public void beforeRotation()
-            {
+            public void beforeRotation() {
                 // Open first name dialog
                 onView(withId(R.id.first_name_row))
                         .check(matches(isDisplayed()))
                         .perform(click());
 
                 // Type name
-                name = "MyFirstName"+(new Random().nextInt(100));
+                name = "MyFirstName" + (new Random().nextInt(100));
                 onView(withId(R.id.my_profile_dialog_input))
                         .check(matches(isDisplayed()))
                         .perform(replaceText(name));
@@ -69,8 +64,7 @@ public class MyProfileActivityTest extends ActivityRuleLifecycleTest<MyProfileAc
             }
 
             @Override
-            public void afterRotation()
-            {
+            public void afterRotation() {
                 // Check name in the button
                 onView(withId(R.id.first_name))
                         .check(matches(allOf(isDisplayed(), withText(name))));
@@ -80,29 +74,25 @@ public class MyProfileActivityTest extends ActivityRuleLifecycleTest<MyProfileAc
 
     @Nullable
     @Override
-    protected RecreateCallback testRecreation()
-    {
+    protected RecreateCallback testRecreation() {
         return null;
     }
 
     @Nullable
     @Override
-    protected PauseCallback testPause()
-    {
+    protected PauseCallback testPause() {
         return null;
     }
 
     @Nullable
     @Override
-    protected StopCallback testStop()
-    {
+    protected StopCallback testStop() {
         return null;
     }
 
     @Nullable
     @Override
-    protected DestroyCallback testDestroy()
-    {
+    protected DestroyCallback testDestroy() {
         return null;
     }
 }

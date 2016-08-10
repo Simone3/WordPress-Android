@@ -15,21 +15,21 @@ class MediaUploadOnSubscribe implements Observable.OnSubscribe<BusEvent> {
         new EventBusSubscriber() {
             @SuppressWarnings("unused")
             public void onEventMainThread(MediaEvents.MediaUploadSucceeded event) {
-                if(!subscriber.isUnsubscribed()) {
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(new MediaUploadSuccessEvent());
                 }
             }
 
             @SuppressWarnings("unused")
             public void onEventMainThread(MediaEvents.MediaUploadFailed event) {
-                if(!subscriber.isUnsubscribed()) {
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(new MediaUploadFailureEvent());
                 }
             }
 
             @SuppressWarnings("unused")
             public void onEventMainThread(MediaEvents.MediaUploadProgress event) {
-                if(!subscriber.isUnsubscribed()) {
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(new MediaUploadProgressEvent(event.mProgress));
                 }
             }

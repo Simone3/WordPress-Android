@@ -23,6 +23,6 @@ public class PostChangeEvent extends BusEvent {
 
     @Override
     public String toString() {
-        return "{Post change on view "+viewId+"}";
+        return "{Post change on view " + viewId + "}";
     }
 }
