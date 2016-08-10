@@ -32,7 +32,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 public class NotificationsSettingsActivityTest extends ActivityRuleLifecycleTest<NotificationsSettingsActivity>
 {
     @Override
-    protected ActivityTestRule<NotificationsSettingsActivity> getActivityTestRule()
+    protected ActivityTestRule<NotificationsSettingsActivity> initializeActivityTestRule()
     {
         return new ActivityTestRule<>(NotificationsSettingsActivity.class);
     }

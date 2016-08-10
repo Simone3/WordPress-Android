@@ -32,7 +32,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 public class ReaderPostPagerActivityTest extends ActivityRuleLifecycleTest<ReaderPostPagerActivity>
 {
     @Override
-    protected ActivityTestRule<ReaderPostPagerActivity> getActivityTestRule()
+    protected ActivityTestRule<ReaderPostPagerActivity> initializeActivityTestRule()
     {
         return new ActivityTestRule<ReaderPostPagerActivity>(ReaderPostPagerActivity.class, false, false)
         {

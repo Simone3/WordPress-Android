@@ -32,7 +32,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 public class MyProfileActivityTest extends ActivityRuleLifecycleTest<MyProfileActivity>
 {
     @Override
-    protected ActivityTestRule<MyProfileActivity> getActivityTestRule()
+    protected ActivityTestRule<MyProfileActivity> initializeActivityTestRule()
     {
         return new ActivityTestRule<>(MyProfileActivity.class);
     }
