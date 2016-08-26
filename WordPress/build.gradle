@@ -136,6 +136,12 @@ dependencies {
     releaseCompile project(path:':libs:editor:WordPressEditor', configuration: 'release')
     debugCompile project(path:':libs:editor:WordPressEditor', configuration: 'debug')
 
+    // The lifecycle testing library
+    androidTestCompile ('it.polimi.testing:activity-rule-lifecycle-testing:1.0') {
+        exclude group: 'com.android.support'
+        exclude group: 'com.android.support.test'
+    }
+
     // Espresso (UI testing)
     androidTestCompile ('com.android.support.test:runner:0.5') {
         exclude module: 'tagsoup'
@@ -148,12 +154,6 @@ dependencies {
     androidTestCompile ('com.android.support.test.espresso:espresso-intents:2.2.2') {
         exclude module: 'tagsoup'
         exclude module: 'support-annotations'
-    }
-
-    // The lifecycle testing library
-    androidTestCompile ('it.polimi.testing:activity-rule-lifecycle-testing:1.0') {
-        exclude group: 'com.android.support'
-        exclude group: 'com.android.support.test'
     }
 }
 
